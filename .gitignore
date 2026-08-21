@@ -1,0 +1,30 @@
+# ─── Worktrees de Claude Code ───
+# Cada sesión paralela crea uno aquí. Su contenido vive en su propia rama;
+# si no se ignora, aparece como archivos sin seguimiento en el checkout principal.
+.claude/worktrees/
+
+# ─── Estado por sesión ───
+.claude/settings.local.json
+
+# ─── Credenciales. Nunca subir. ───
+.env
+.env.local
+*.pem
+*-key.json
+service-account*.json
+
+# ─── Reuniones: audio y transcripciones crudas ───
+# Nunca entran a git ni al vault. Solo la destilación revisada, y esa va al vault.
+meetings/
+*.wav
+*.m4a
+*.mp3
+
+# ─── Modelos de Whisper (cientos de MB) ───
+models/
+
+# ─── Dependencias y sistema ───
+node_modules/
+__pycache__/
+.venv/
+.DS_Store

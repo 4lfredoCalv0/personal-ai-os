@@ -1,0 +1,4 @@
+# Archivos gitignored que se copian a cada worktree nuevo.
+# Sin esto, un worktree arranca sin credenciales locales y falla de forma confusa.
+.env
+.env.local
