@@ -29,4 +29,4 @@ como ejecutor técnico.
 
 La arquitectura completa está en [`docs/arquitectura.md`](docs/arquitectura.md).
 
-**El vault vive aparte**, en `~/Documents/Obsidian Vault`, con su propio repositorio.
+**El vault vive aparte**, en `~/Obsidian Vault`, con su propio repositorio.

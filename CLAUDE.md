@@ -9,7 +9,7 @@ reuniones y documentos de arquitectura.
 
 ## 1. Frontera con el vault
 
-`~/Documents/Obsidian Vault` es la **fuente de verdad del conocimiento** y tiene su
+`~/Obsidian Vault` es la **fuente de verdad del conocimiento** y tiene su
 propio `CLAUDE.md` con las convenciones. Este repo no las duplica: las referencia.
 
 | Aquí | En el vault |
@@ -68,7 +68,7 @@ ajenas, mergear a `main` sin revisión humana.
 
 ## 4. El vault NO usa worktrees
 
-Si una tarea toca `~/Documents/Obsidian Vault`, se trabaja sobre su **único
+Si una tarea toca `~/Obsidian Vault`, se trabaja sobre su **único
 directorio**, nunca sobre una copia. Razones:
 
 - Obsidian indexa un solo directorio; un worktree sería invisible para la app.
@@ -116,7 +116,7 @@ approvals:
 ```
 
 ```bash
-HERMES_WRITE_SAFE_ROOT="/Users/alfredocalvo/Documents/Obsidian Vault"
+HERMES_WRITE_SAFE_ROOT="/Users/alfredocalvo/Obsidian Vault"
 ```
 
 Con eso, Hermes solo puede escribir dentro del vault. Todo lo demás queda bloqueado

@@ -15,7 +15,7 @@ El vault es la **fuente de verdad del conocimiento**: proyectos, decisiones,
 personas, procedimientos y reuniones de Alfredo (Salus Saunas).
 
 ```
-/Users/alfredocalvo/Documents/Obsidian Vault
+/Users/alfredocalvo/Obsidian Vault
 ```
 
 ## Antes de nada: leer las convenciones
@@ -67,7 +67,7 @@ Para responder *"¿qué ha pasado con el proyecto X?"*, buscar qué archivos
 contienen `[[X]]`:
 
 ```bash
-grep -rl '\[\[Gmail Assistant\]\]' "/Users/alfredocalvo/Documents/Obsidian Vault" --include='*.md'
+grep -rl '\[\[Gmail Assistant\]\]' "/Users/alfredocalvo/Obsidian Vault" --include='*.md'
 ```
 
 ## Tareas
@@ -78,7 +78,7 @@ Son casillas inline `- [ ]` dentro de la nota donde nacieron, con fecha opcional
 Para listarlas sin contar los ejemplos de la documentación:
 
 ```bash
-"/Users/alfredocalvo/Documents/Obsidian Vault/99 System/Scripts/pendientes.sh"
+"/Users/alfredocalvo/Obsidian Vault/99 System/Scripts/pendientes.sh"
 ```
 
 ## Reglas de escritura — FASE ACTUAL
@@ -101,7 +101,7 @@ Fuera del Inbox: **preguntar antes**. Y nunca borrar nada — se marca
 ## Después de escribir, siempre
 
 ```bash
-cd "/Users/alfredocalvo/Documents/Obsidian Vault"
+cd "/Users/alfredocalvo/Obsidian Vault"
 git status --porcelain
 "99 System/Scripts/check-links.sh"
 ```
