@@ -1,32 +1,35 @@
-# Configuración de Hermes
+# Orchestrator configuration (discarded approach)
 
-Copia versionada de `~/.hermes/config.yaml`. **No incluye secretos** — las API keys
-viven en `~/.hermes/.env`, que nunca se versiona.
+> Kept as a record. This orchestrator was removed on 2026-08-21 — see the
+> repository README for why. Nothing here is in use.
 
-## Decisiones reflejadas aquí
+A versioned copy of the config file. **No secrets** — API keys lived in a
+separate `.env` that was never committed.
 
-| Clave | Valor | Por qué |
+## Decisions reflected here
+
+| Key | Value | Why |
 |---|---|---|
-| `model.default` | `claude-sonnet-5` | Buena relación costo/latencia para conversar y capturar. Lo pesado se delega a Claude Code. |
-| `model.provider` | `anthropic` | Anthropic directo. **El instalador trae `base_url` de OpenRouter por defecto** — se quitó, o una key de Anthropic no funcionaría. |
-| `approvals.mode` | `smart` | Un LLM auxiliar evalúa el riesgo; lo peligroso se deniega solo. |
-| `approvals.cron_mode` | `deny` | Las tareas programadas nunca auto-aprueban comandos peligrosos. |
+| `model.default` | `claude-sonnet-5` | Good cost/latency balance for conversation and capture. Heavy work was delegated to Claude Code. |
+| `model.provider` | `anthropic` | Anthropic directly. **The installer ships an OpenRouter `base_url` by default** — it had to be removed, or an Anthropic key wouldn't work. |
+| `approvals.mode` | `smart` | An auxiliary model assesses risk; dangerous operations are denied automatically. |
+| `approvals.cron_mode` | `deny` | Scheduled tasks never auto-approve dangerous commands. |
 
-En `.env` (fuera de git): `HERMES_WRITE_SAFE_ROOT` apuntando al vault, que acota
-`write_file` y `patch` a esa carpeta **a nivel de herramienta**.
+In `.env` (outside git): a write-safe root pointing at the vault, which scoped
+`write_file` and `patch` to that folder **at tool level**.
 
-## Modelos auxiliares
+## Auxiliary models
 
-Hermes usa un modelo barato aparte para tareas laterales (visión, resumen web,
-compresión de contexto, títulos de sesión, búsqueda en sesiones). Por defecto
-Gemini Flash, autodetectado. **Se dejan en `auto`**: el propio config advierte que
-cambiarlos a proveedores distintos de OpenRouter o Nous Portal es experimental.
+The orchestrator used a separate cheap model for side tasks (vision, web
+summarisation, context compression, session titles, session search). These were
+left on `auto`: the config itself warns that pointing them at providers other
+than the defaults is experimental.
 
-No existe un router por dificultad para la conversación principal. Para una sesión
-que se sabe pesada: `hermes -m claude-opus-5`.
+There was no difficulty-based router for the main conversation. For a session
+known to be heavy, you picked the model explicitly at launch.
 
-## Cuidado al editar
+## A trap when editing
 
-`hermes config set` **reescribe el archivo normalizado y borra todos los comentarios**
-(de 1924 líneas a 135 la primera vez). El original comentado quedó en
-`~/.hermes/config.yaml.bak-preclaude`.
+`config set` **rewrites the file normalised and strips every comment** — 1924
+lines down to 135 on the first run. The commented original was kept as a
+`.bak` alongside it.

@@ -66,7 +66,7 @@ Three planned scripts were never written.
 
 | Path | Contents |
 |---|---|
-| `docs/arquitectura.md` | The full document. Part 1: parallel work, worktrees, the vault's write policy, git conventions. Part 2: the Hermes architecture that was discarded, with its declared risks |
+| `docs/architecture.md` | The full document. Part 1: parallel work, worktrees, the vault's write policy, git conventions. Part 2: the Hermes architecture that was discarded, with its declared risks |
 | `CLAUDE.md` | Context and instructions for Claude Code sessions working on this repo |
 | `hermes/` | Configuration for the discarded approach. Kept as a record, not in use |
 
@@ -79,4 +79,4 @@ evaluated, what was built, and why it was removed. The decision to delete a
 piece that already worked tends to be documented far worse than the decision to
 build it.
 
-> The documents under `docs/` are written in Spanish.
+
