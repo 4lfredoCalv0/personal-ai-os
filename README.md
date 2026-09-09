@@ -1,78 +1,82 @@
 # personal-ai-os
 
-Notas de diseño de mi asistente personal: **Claude Code como agente, un vault de
-Obsidian como memoria, y n8n para lo que tiene que correr solo.**
+Design notes for my personal assistant: **Claude Code as the agent, an Obsidian
+vault as memory, and n8n for whatever has to run unattended.**
 
-Este repositorio es sobre todo un documento de arquitectura y un registro de
-decisiones. El código operativo vive en otras partes — el vault tiene su propio
-repositorio, y las automatizaciones viven en n8n.
+This repository is mostly an architecture document and a decision record. The
+working parts live elsewhere — the vault has its own repository, and the
+automations live in n8n.
 
-## La decisión principal: quitar la capa de orquestación
+## The main decision: removing the orchestration layer
 
-El diseño original tenía un orquestador propio, **Hermes**, en el centro:
-recibiría mensajes por Telegram, decidiría qué hacer, delegaría a Claude Code
-por subprocess, y escribiría en el vault.
+The original design had a custom orchestrator, **Hermes**, at the centre: it
+would take messages over Telegram, decide what to do, delegate to Claude Code
+through a subprocess, and write to the vault.
 
-Se instaló, se configuró y se probó. **Se descartó el 21-ago-2026.**
+It was installed, configured and tested. **It was discarded on 2026-08-21.**
 
-La razón: la capa que iba a añadir ya existía. Se justificó a Hermes como "capa
-conversacional", pero Claude Code ya lo es, y tiene terminal, escritorio y web.
-Al revisar capacidad por capacidad, la única que Hermes aportaba de verdad era
-Telegram y WhatsApp. Todo lo demás —conversar, recuperar contexto, delegar,
-capturar reuniones, automatizar, proactividad— ya estaba resuelto por Claude
-Code, por un plugin de Obsidian o por el MCP de n8n.
+The reason: the layer it was going to add already existed. Hermes was justified
+as "the conversational layer", but Claude Code already is one, and it comes with
+a terminal, a desktop app and a web client. Going capability by capability, the
+only thing Hermes genuinely added was Telegram and WhatsApp. Everything else —
+holding a conversation, recalling context, delegating work, capturing meetings,
+running automations, acting proactively — was already covered by Claude Code, an
+Obsidian plugin, or the n8n MCP server.
 
-Construir un orquestador para cubrir un hueco de mensajería no compensaba
-mantener una pieza más en el camino crítico.
+Building an orchestrator to close a messaging gap wasn't worth another moving
+piece on the critical path.
 
 ```
-        TÚ  (terminal · escritorio · Obsidian)
+        YOU  (terminal · desktop · Obsidian)
                      │
             ┌────────▼────────┐
-            │   CLAUDE CODE   │  agente · tareas programadas · MCP
+            │   CLAUDE CODE   │  agent · scheduled tasks · MCP
             └────┬───────┬────┘
-                 │       └──────────► n8n  (lo que corre sin nadie delante)
+                 │       └──────────► n8n  (what runs with nobody watching)
                  ▼
-          OBSIDIAN VAULT  ◄── fuente de verdad
+          OBSIDIAN VAULT  ◄── source of truth
                  ▲
-         solo tras revisión humana
+          only after human review
 ```
 
-## El hallazgo que ahorró el trabajo
+## The finding that saved the work
 
-La Parte 1 del documento de arquitectura resuelve un problema concreto: **correr
-varias sesiones de agente en paralelo sobre el mismo repositorio sin que se
-pisen.**
+Part 1 of the architecture document solves a concrete problem: **running several
+agent sessions in parallel against the same repository without them stepping on
+each other.**
 
-Dos sesiones editando el mismo checkout se sobrescriben sin avisar. La solución
-que iba a construir —scripts para crear, listar y cerrar worktrees— resultó
-innecesaria: Claude Code trae worktrees nativos con aislamiento aplicado a nivel
-de herramienta.
+Two sessions editing the same checkout overwrite each other silently. The
+solution I was about to build — scripts to create, list and close worktrees —
+turned out to be unnecessary. Claude Code ships native worktrees with isolation
+enforced at the tool level.
 
 ```bash
 claude --worktree hermes
 ```
 
-No es una convención que el agente pueda ignorar. Bloquea activamente las
-ediciones fuera del worktree, los comandos cuyo directorio resuelva al checkout
-principal, la redirección de git (`git -C`, `--git-dir`, `GIT_DIR`), y las
-construcciones de shell que no puede trazar sin ejecutarlas. Un agente no se
-escapa de su worktree aunque se lo pidas.
+This isn't a convention the agent can ignore. It actively blocks edits outside
+the worktree, commands whose working directory resolves back to the main
+checkout, git redirection (`git -C`, `--git-dir`, `GIT_DIR`), and shell
+constructs it can't trace without executing them. An agent can't escape its
+worktree even if you ask it to.
 
-Tres scripts que estaban planeados no se escribieron.
+Three planned scripts were never written.
 
-## Qué hay en el repositorio
+## What's in here
 
-| Carpeta | Contenido |
+| Path | Contents |
 |---|---|
-| `docs/arquitectura.md` | El documento completo. Parte 1: trabajo en paralelo, worktrees, política de escritura del vault, convenciones de git. Parte 2: la arquitectura de Hermes que se descartó, con sus riesgos declarados |
-| `CLAUDE.md` | Contexto e instrucciones para las sesiones de Claude Code sobre este repo |
-| `hermes/` | Configuración de la aproximación descartada. Se conserva como registro, no está en uso |
+| `docs/arquitectura.md` | The full document. Part 1: parallel work, worktrees, the vault's write policy, git conventions. Part 2: the Hermes architecture that was discarded, with its declared risks |
+| `CLAUDE.md` | Context and instructions for Claude Code sessions working on this repo |
+| `hermes/` | Configuration for the discarded approach. Kept as a record, not in use |
 
-El vault vive aparte, en `~/Obsidian Vault`, con su propio repositorio.
+The vault lives separately, in `~/Obsidian Vault`, with its own repository.
 
-## Por qué está publicado
+## Why this is public
 
-Menos por el código —hay poco— y más por el razonamiento: qué se evaluó, qué se
-construyó, y por qué se quitó. La decisión de borrar una pieza que ya funcionaba
-suele estar peor documentada que la de construirla.
+Less for the code — there isn't much — and more for the reasoning: what was
+evaluated, what was built, and why it was removed. The decision to delete a
+piece that already worked tends to be documented far worse than the decision to
+build it.
+
+> The documents under `docs/` are written in Spanish.
